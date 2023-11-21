@@ -4,13 +4,19 @@
 // using namespace std;
 
 pros::Motor motorFR(7);
+pros::Motor motorTR();
 pros::Motor motorBR(10);
-pros::Motor motorLF(1);
-pros::Motor motorLB(2);
-pros::Motor rCata(5, true);
-pros::Motor lCata(3);
-pros::Controller master(pros::E_CONTROLLER_MASTER);
+pros::Motor_Group rightMotors ({motorFR, motorTR(), motorBR});
 
+
+pros::Motor motorFL(1);
+pros::Motor motorTL();
+pros::Motor motorBL(2);
+pros::Motor_Group leftMotors ({motorFL, motorTL(), motorBL});
+
+pros::Motor cata(5, true);
+
+pros::Controller master(pros::E_CONTROLLER_MASTER);
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -19,10 +25,7 @@ pros::Controller master(pros::E_CONTROLLER_MASTER);
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-
-rCata.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-lCata.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-
+	cata.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 }
 
 /**
@@ -31,7 +34,6 @@ lCata.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
  * the robot is enabled, this task will exit.
  */
 void disabled() {}
-
 /**
  * Runs after initialize(), and before autonomous when connected to the Field
  * Management System or the VEX Competition Switch. This is intended for
@@ -41,8 +43,11 @@ void disabled() {}
  * This task will exit when the robot is enabled and autonomous or opcontrol
  * starts.
  */
-void competition_initialize() {}
 
+void competition_initialize() {
+	leftMotors.move_velocity(180);
+	rightMotors.move_velocity(180);
+}
 /**
  * Runs the user autonomous code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -70,110 +75,26 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 
-/*void driveTrainRight()
-{
-	motorFR = master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y);
-	motorFB = master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y);
-
-}
-
-void driveTrainLeft()
-{
-	motorLF = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-	motorLB = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-}*/
-
-void driveTrainAll()
-{
+void driveTrainAll(){
 	int power = master.get_analog(ANALOG_LEFT_Y);
-    int turn = master.get_analog(ANALOG_LEFT_X);
-    int left = (-1*(power + ((turn)*0.6)))*0.6;
-    int right = (power - ((turn)*0.6))*0.6;
-    motorLF.move(left);
-	motorLB.move(left);
-    motorFR.move(right);
-	motorBR.move(right);
+    int turn = master.get_analog(ANALOG_RIGHT_X);
+    int left = (-1*(power + ((turn)*0.9)))*0.9;
+    int right = (power - ((turn)*0.9))*0.9;
+    leftMotors.move_velocity(left);
+    rightMotors.move_velocity(right);
 }
 
-void catapultAll()
-{
+void catapultAll(){
 	if (master.get_digital(DIGITAL_A)){
-	rCata.move_velocity(50);
-	lCata.move_velocity(50);
-	 } else
-	{
-	rCata.move_velocity(0);
-	lCata.move_velocity(0);
+	cata.move_velocity(50);
+	} else{
+	cata.move_velocity(0);
 	};
 }
 
 void opcontrol() {
-
-
-
-while(true)
-{
-driveTrainAll();
-catapultAll();
-}
-
-	// shared_ptr<ChassisController> drive =
-	// 	ChassisControllerBuilder()
-	// 		.withMotors(1, -10)
-	// 		.withDimensions(AbstractMotor::gearset::green, {{4_in, 14.75_in}, imev5GreenTPR})
-    //         .build();
-
-	// printf("Chassis Controller Built\n")
-
-	// Controller controller;
-
-	// ControllerButton armUpButton(ControllerDigital::A);
-	// ControllerButton armDownButton(ControllerDigital::B);
-	// ControllerButton clawCloseButton( ControllerDigital::X);
-	// ControllerButton clawOpenButton( ControllerDigital::Y);
-	// ControllerButton clawCloseSmallButton(ControllerDigital::up);
-	// ControllerButton clawOpenSmallButton(ControllerDigital::down);
-	// Motor rarmMotor(9);
-	// Motor larmMotor(-13);
-	// Motor clawMotor(15);
-
-	// MotorGroup arm ({
-	// 	rarmMotor,
-	// 	larmMotor
-	// });
-
-
-	// while (true) {
-	// 	drive->getModel()->tank(controller.getAnalog(ControllerAnalog::leftY),
-	// 							controller.getAnalog(ControllerAnalog::rightY));
-
-
-	// 	if (armUpButton.isPressed()) {
-	// 		arm.moveVoltage(6000);
-	// 	} else if (armDownButton.isPressed()) {
-	// 		arm.moveVoltage(-6000);
-	// 	} else {
-	// 		arm.moveVoltage(0);
-	// 	}	
-
-	// 	if(clawCloseButton.isPressed()){
-	// 		clawMotor.moveVoltage(6000);
-
-	// 	} else if (clawOpenButton.isPressed()){
-	// 		clawMotor.moveVoltage(-6000);
-	// 	}else{
-	// 		clawMotor.moveVoltage(0);
-	// 	}
-
-	// 	if(clawCloseSmallButton.isPressed()){
-	// 		clawMotor.moveVoltage(3000);
-
-	// 	} else if (clawOpenSmallButton.isPressed()){
-	// 		clawMotor.moveVoltage(-3000);
-	// 	}else{
-	// 		clawMotor.moveVoltage(0);
-	// 	}
-
-	// 	pros::delay(10);				
-	// }
+	while(true){
+		driveTrainAll();
+		catapultAll();
+	}
 }
