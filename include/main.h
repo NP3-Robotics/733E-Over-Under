@@ -35,12 +35,27 @@
 #define PROS_USE_LITERALS
 
 #include "api.h"
-
 /**
  * You should add more #includes here
  */
 //#include "okapi/api.hpp"
 //#include "pros/api_legacy.h"
+
+extern pros::Motor motorFR;
+extern pros::Motor motorTR;
+extern pros::Motor motorBR;
+extern pros::Motor_Group rightMotors;
+
+extern pros::Motor motorFL;
+extern pros::Motor motorTL;
+extern pros::Motor motorBL;
+extern pros::Motor_Group leftMotors;
+
+extern pros::Motor cata;
+
+extern pros::Controller master;
+
+extern int turboswitch;
 
 /**
  * If you find doing pros::Motor() to be tedious and you'd prefer just to do

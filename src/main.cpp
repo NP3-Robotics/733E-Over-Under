@@ -4,38 +4,21 @@
 // using namespace okapi;
 // using namespace std;
 
-pros::Motor motorFR(7);
-pros::Motor motorTR();
-pros::Motor motorBR(10);
-pros::Motor_Group rightMotors ({motorFR, motorTR(), motorBR});
+ pros::Motor motorFR(7);
+ //pros::Motor motorTR();
+ pros::Motor motorBR(10);
+ pros::Motor_Group rightMotors {motorFR, motorTR, motorBR};
 
+ pros::Motor motorFL(1);
+ //pros::Motor motorTL();
+ pros::Motor motorBL(2);
+ pros::Motor_Group leftMotors {motorFL, motorTL, motorBL};
 
-pros::Motor motorFL(1);
-pros::Motor motorTL();
-pros::Motor motorBL(2);
-pros::Motor_Group leftMotors ({motorFL, motorTL(), motorBL});
+ pros::Motor cata(5, true);
 
-pros::Motor cata(5, true);
+ pros::Controller master(pros::E_CONTROLLER_MASTER);
 
-pros::Controller master(pros::E_CONTROLLER_MASTER);
-
-int turboswitch = 0;
-
-/**
- * Runs the user autonomous code. This function will be started in its own task
- * with the default priority and stack size whenever the robot is enabled via
- * the Field Management System or the VEX Competition Switch in the autonomous
- * mode. Alternatively, this function may be called in initialize or opcontrol
- * for non-competition testing purposes.
- *
- * If the robot is disabled or communications is lost, the autonomous task
- * will be stopped. Re-enabling the robot will restart the task, not re-start it
- * from where it left off.
- */
-void autonomous() {
-	leftMotors.move_velocity(180);
-	rightMotors.move_velocity(180);
-}
+ int turboswitch = 0;
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
