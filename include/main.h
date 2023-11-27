@@ -51,11 +51,11 @@ extern pros::Motor motorTL;
 extern pros::Motor motorBL;
 extern pros::Motor_Group leftMotors;
 
+extern pros::Motor_Group allMotors;
+
 extern pros::Motor cata;
 
 extern pros::Controller master;
-
-extern int turboswitch;
 
 /**
  * If you find doing pros::Motor() to be tedious and you'd prefer just to do
