@@ -12,6 +12,5 @@
  * from where it left off.
  */
 void autonomous() {
-	leftMotors.move_velocity(180);
-	rightMotors.move_velocity(180);
+	allMotors.move_velocity(180);
 }

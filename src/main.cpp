@@ -1,24 +1,33 @@
 #include "main.h"
 #include "pros/misc.h"
-// #include "okapi/api.hpp"
-// using namespace okapi;
-// using namespace std;
+#include "drive.cpp"
+#include "pros/motors.h"
 
- pros::Motor motorFR(7);
- //pros::Motor motorTR();
- pros::Motor motorBR(10);
- pros::Motor_Group rightMotors {motorFR, motorTR, motorBR};
+pros::Controller master(pros::E_CONTROLLER_MASTER);
 
- pros::Motor motorFL(1);
- //pros::Motor motorTL();
- pros::Motor motorBL(2);
- pros::Motor_Group leftMotors {motorFL, motorTL, motorBL};
+pros::Motor motorFR(7, false);
+pros::Motor motorTR(8, false);
+pros::Motor motorBR(10, false);
+pros::Motor_Group rightMotors {motorFR, motorTR, motorBR};
 
- pros::Motor cata(5, true);
+pros::Motor motorFL(4, true);
+pros::Motor motorTL(11, true);
+pros::Motor motorBL(1, true);
+pros::Motor_Group leftMotors {motorFL, motorTL, motorBL};
 
- pros::Controller master(pros::E_CONTROLLER_MASTER);
+pros::Motor_Group allMotors {motorFL, motorTL, motorBL, motorFR, motorTR, motorBR};
 
- int turboswitch = 0;
+pros::Motor cata(5, true);
+
+void puncher() { // da puncha B)
+	if (master.get_digital(DIGITAL_A)){
+		cata.move_velocity(85); //change cata speed here !!
+	} else{
+		cata.move_velocity(0);
+	};
+}
+
+Drivetrain testdrive(0.5, 0.7, 1, 0.5);
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -36,6 +45,7 @@ void initialize() {
  * the robot is enabled, this task will exit.
  */
 void disabled() {}
+
 /**
  * Runs after initialize(), and before autonomous when connected to the Field
  * Management System or the VEX Competition Switch. This is intended for
@@ -45,7 +55,6 @@ void disabled() {}
  * This task will exit when the robot is enabled and autonomous or opcontrol
  * starts.
  */
-
 void competition_initialize() {
 }
 
@@ -63,38 +72,11 @@ void competition_initialize() {
  * task, not resume it from where it left off.
  */
 
-void driveTrainAll(int switchtoggle) {
-	int power = master.get_analog(ANALOG_LEFT_Y);
-    int turn = master.get_analog(ANALOG_RIGHT_X);
-	int left;
-	int right;
-	turboswitch = switchtoggle;
-	if (turboswitch == 0){
-		left = (-1*(power + ((turn)*0.9)))*0.9;
-		right = (power - ((turn)*0.9))*0.9;
-	} else if (turboswitch == 1){
-		left = (-1*(power + ((turn)*1)))*1;
-		right = (power - ((turn)*1))*1;
-	}
-    leftMotors.move_velocity(left);
-    rightMotors.move_velocity(right);
-}
-
-void catapultAll() {
-	if (master.get_digital(DIGITAL_A)){
-	cata.move_velocity(85);
-	} else{
-	cata.move_velocity(0);
-	};
-}
+// runs drivetrain, input num between 0 and 1 for speed
 
 void opcontrol() {
 	while(true){
-		if (master.get_digital(DIGITAL_Y) && turboswitch == 1){
-			driveTrainAll(0);
-		} else if (master.get_digital(DIGITAL_Y) && turboswitch == 0){
-			driveTrainAll(1);
-		}
-		catapultAll();
+		testdrive.move(true, true);
+		puncher();
 	}
 }
