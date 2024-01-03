@@ -1,17 +1,19 @@
 #include "main.h"
+#include "pros/adi.hpp"
 #include "pros/misc.h"
 #include "drive.cpp"
 #include "pros/motors.h"
+#include "pros/api_legacy.h"
 
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 
-pros::Motor motorFR(7, false);
-pros::Motor motorTR(8, false);
+pros::Motor motorFR(14, false);
+pros::Motor motorTR(11, false);
 pros::Motor motorBR(10, false);
 pros::Motor_Group rightMotors {motorFR, motorTR, motorBR};
 
 pros::Motor motorFL(4, true);
-pros::Motor motorTL(11, true);
+pros::Motor motorTL(13, true);
 pros::Motor motorBL(1, true);
 pros::Motor_Group leftMotors {motorFL, motorTL, motorBL};
 

@@ -12,5 +12,13 @@
  * from where it left off.
  */
 void autonomous() {
+	//
 	allMotors.move_velocity(180);
+	pros::delay(550);
+	allMotors.move_velocity(-360);
+	pros::delay(500);
+	allMotors.move_velocity(0);
+
+	// skills auton:
+	// cata.move_velocity(85);
 }

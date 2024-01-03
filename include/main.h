@@ -24,6 +24,7 @@
  * E_CONTROLLER_MASTER is pedantically correct within the PROS styleguide, but
  * not convenient for most student programmers.
  */
+#include "pros/adi.hpp"
 #define PROS_USE_SIMPLE_NAMES
 
 /**
@@ -57,7 +58,7 @@ extern pros::Motor cata;
 
 extern pros::Controller master;
 
-/**
+/*
  * If you find doing pros::Motor() to be tedious and you'd prefer just to do
  * Motor, you can use the namespace with the following commented out line.
  *

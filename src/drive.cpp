@@ -40,9 +40,10 @@ class Drivetrain { // all the code for the drive in manual
 			drivespeed = standarddrivespeed;
 			drivedirection = 1;
 		} // set deadband to 0 to not restrict the joystick, set scale weight to 0 to make joystick movement linear
-        void move(bool speedSwitchEnabled, bool directionSwitchEnabled) {
+		
+		void move(bool speedSwitchEnabled, bool directionSwitchEnabled) {
             power = (master.get_analog(ANALOG_LEFT_Y))/0.635;
-            turn = (master.get_analog(ANALOG_RIGHT_X))/0.635;
+            turn = (master.get_analog(ANALOG_RIGHT_X))/0.85;
 			std::cout << master.get_analog(ANALOG_LEFT_Y) << " <-- left joystick" << '\n';
 			std::cout << power << " <-- left joystick divided by 0.635" << '\n';
 
@@ -69,9 +70,15 @@ class Drivetrain { // all the code for the drive in manual
 
             if (directionSwitchEnabled) {
                 if (master.get_digital_new_press(DIGITAL_X) && drivedirection == 1) {
-                    drivedirection = -1;
+                    drivedirection = left;
+					left = right;
+					right = left;
+					drivedirection = -1;
                 } else if (master.get_digital_new_press(DIGITAL_X) && drivedirection == -1) {
-                    drivedirection = 1;
+					drivedirection = left;
+					left = right;
+					right = left;
+					drivedirection = 1;
                 }
 				std::cout << "drive direction is now " << drivedirection << '\n';
             }
